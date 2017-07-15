@@ -1,12 +1,17 @@
 plugins {
     id 'com.github.kt3k.coveralls' version '2.6.3'
+    id "info.solidsoft.pitest" version '1.1.11'
+  id "org.sonarqube" version "2.4"
 }
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 apply plugin: 'maven'
 apply plugin: 'jacoco'
 apply plugin: 'signing'
+// apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
 
 mainClassName = 'org.jreliability.tester.ReliabilityTester'
 group = 'org.jreliability'
@@ -43,7 +48,19 @@ jacocoTestReport {
         })
     }
 }
+/*
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+*/
 
+pitest {
+    timestampedReports = false
+    outputFormats = ['XML', 'HTML']
+}
 // maven central artifacts
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -124,4 +141,10 @@ uploadArchives {
       }
     }
   }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'jreliability'
+    }
 }

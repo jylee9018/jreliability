@@ -1,4 +1,10 @@
 language: java
 
+addons:
+  sonarcloud:
+    organization: "felixreimann" # the key of the org you chose at step #3
+script:
+  - sonar-scanner
+
 after_success:
 - ./gradlew jacocoTestReport coveralls
